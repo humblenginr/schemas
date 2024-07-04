@@ -25,32 +25,9 @@
         "format": "uuid"
       },
       "type": "object",
-      "properties": {
-        "schemaVersion": {
-          "$ref": "./component.json#/properties/schemaVersion"
-        },
-        "version": {
-          "$ref": "./component.json#/properties/version"
-        },
-        "name": {
-          "$ref": "../v1alpha2/core.json#/definitions/inputString"
-        },
-        "metadata": {
-          "$ref": "./component.json#/properties/metadata"
-        },
-        "model": {
-          "$ref": "./component.json#/properties/model"
-        },
-        "component": {
-          "type": "object",
-          "description": "Component and it's configuration.",
+      "allOf": [
+        {
           "properties": {
-            "version": {
-              "$ref": "./component.json#/properties/component/properties/version"
-            },
-            "kind": {
-              "$ref": "./component.json#/properties/component/properties/kind"
-            },
             "configuration": {
               "$comment": "The configuration of the component. The configuration is based on the schema defined within the component definition.",
               "additionalProperties": {
@@ -58,21 +35,11 @@
               },
               "type": "object"
             }
-          },
-          "required": [
-            "version",
-            "kind",
-            "configuration"
-          ]
+          }
+        },
+        {
+          "$ref": "./component.json"
         }
-      },
-      "required": [
-        "schemaVersion",
-        "version",
-        "name",
-        "model",
-        "metadata",
-        "component"
       ]
     },
     "preferences": {
@@ -96,51 +63,38 @@
       "description": "List of relationships between components",
       "items": {
         "type": "object",
-        "properties": {
-          "schemaVersion": {
-            "$ref": "../v1alpha2/relationship.json#/properties/schemaVersion"
+        "allOf": [
+          {
+            "$ref": "../v1alpha2/relationship.json"
           },
-          "version": {
-            "$ref": "../v1alpha2/relationship.json#/properties/version"
-          },
-          "from": {
-            "type": "string",
-            "format": "uuid",
-            "description": "ID (UUID) of the source component"
-          },
-          "to": {
-            "type": "string",
-            "format": "uuid",
-            "description": "ID (UUID) of the target component"
-          },
-          "kind": {
-            "$ref": "../v1alpha2/relationship.json#/properties/kind",
-            "description": "Kind of the relationship"
-          },
-          "type": {
-            "$ref": "../v1alpha2/relationship.json#/properties/type",
-            "description": "Type of the relationship"
-          },
-          "subType": {
-            "$ref": "../v1alpha2/relationship.json#/properties/subType",
-            "description": "Subtype of the relationship (optional)"
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "evaluating",
-              "valid",
-              "invalid"
-            ],
-            "description": "Status of the relationship"
+          {
+            "properties": {
+              "from": {
+                "type": "string",
+                "format": "uuid",
+                "description": "ID (UUID) of the source component"
+              },
+              "to": {
+                "type": "string",
+                "format": "uuid",
+                "description": "ID (UUID) of the target component"
+              },
+              "status": {
+                "type": "string",
+                "enum": [
+                  "evaluating",
+                  "valid",
+                  "invalid"
+                ],
+                "description": "Status of the relationship"
+              }
+            },
+            "required": [
+              "from",
+              "to",
+              "status"
+            ]
           }
-        },
-        "required": [
-          "from",
-          "to",
-          "kind",
-          "type",
-          "status"
         ]
       }
     }
